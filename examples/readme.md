@@ -1,0 +1,2 @@
+# examples
+> After all, it is a command line program and only a very small part of the code logic will be involved in each run, so instead of implementing dedicated unit tests, some simple use cases are placed under this folder to ensure usability.
