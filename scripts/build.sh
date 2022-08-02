@@ -14,7 +14,7 @@ cp $__rootdir/package.json $__distdir/package.json
 cd $__distdir
 pkg -C GZip pbsb-cli.js
 
-zip -r -9 "$__distdir/output.zip" .
-zip -r -9 "$__distdir/output-win.zip" ./pbsb-cli-win.exe
-zip -r -9 "$__distdir/output-linux.zip" ./pbsb-cli-linux
-zip -r -9 "$__distdir/output-macos.zip" ./pbsb-cli-macos
+zip -r -9 "$__distdir/pbsb-cli.zip" .
+zip -r -9 "$__distdir/pbsb-cli-win.zip" ./pbsb-cli-win.exe
+zip -r -9 "$__distdir/pbsb-cli-linux.zip" ./pbsb-cli-linux
+zip -r -9 "$__distdir/pbsb-cli-macos.zip" ./pbsb-cli-macos
