@@ -38,12 +38,72 @@ const createURL = (url: string, protocol = "http" as "http" | "https") => {
   throw new Error("create url fail");
 };
 
-const url_with_query = (url: string, query?: Record<string, any>) => {
-  const tURL = createURL(url);
+const url_with_query = (url: string | URL, query?: Record<string, any>) => {
+  const tURL = url instanceof URL ? url : createURL(url);
   if (query) {
     tURL.search = serialize(query);
   }
   return tURL;
+};
+
+export const call = async ({
+  pathname,
+  server_address,
+  method,
+  query,
+  headers,
+  on_data,
+}: {
+  pathname: string;
+  server_address: string;
+  query?: Record<string, any>;
+  method?: string;
+  headers?: Record<string, any>;
+  on_data?: (data: Buffer) => any;
+}) => {
+  const base_url = await ensure_base_url(server_address);
+  const url = new URL(base_url);
+  url.pathname = pathname;
+
+  let resolve!: (x: any) => any;
+  let reject!: (x: any) => any;
+  let resp = new Promise<{ response: http.IncomingMessage }>((re, rj) => [
+    (resolve = re),
+    (reject = rj),
+  ]);
+  const req_url = url_with_query(url, query);
+  const req = (url.protocol === "https:" ? https : http).request(
+    req_url,
+    {
+      rejectUnauthorized: false,
+      // requestCert: true,
+      agent: false,
+      method,
+      headers,
+    },
+    (res) => {
+      resolve({ response: res });
+      res.on("error", reject);
+    }
+  );
+  req.on("error", reject);
+  return {
+    req,
+    resp,
+    body: () =>
+      new Promise<Buffer>(async (resolve, reject) => {
+        const { response } = await resp;
+        const datas = [] as Buffer[];
+        response.on("data", (data) => {
+          datas.push(Buffer.from(data));
+          on_data?.(data);
+        });
+        response.on("end", () => {
+          resolve(Buffer.concat(datas));
+        });
+        response.on("error", reject);
+      }),
+  };
 };
 
 export const fetch = ({
@@ -115,14 +175,12 @@ export const fetch_json = <RET = unknown>(params: {
 }) =>
   fetch(params).then((resp) => {
     const ret = resp as {
-      response: http.IncomingMessage,
-      body: any
+      response: http.IncomingMessage;
+      body: any;
     };
     try {
-      ret.body = JSON.parse(resp.body.toString() || "{}") as RET;
-    } catch (error) {
-      
-    }
+      ret.body = JSON.parse(resp.body.toString("utf-8") || "{}") as RET;
+    } catch (error) {}
     return ret;
   });
 
@@ -197,7 +255,7 @@ export const call_api_json = async ({
   pathname,
   payload,
   query,
-  headers
+  headers,
 }: {
   server_address: string;
   pathname: string;

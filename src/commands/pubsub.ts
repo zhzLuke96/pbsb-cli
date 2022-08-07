@@ -1,18 +1,7 @@
 import { Command } from "commander";
 import { call_api } from "../callApi";
-import { call_api_and_print } from "./misc";
-
-const valid_pubsub_channel = (channel: string) => {
-  const chan = channel[0] === "/" ? channel.slice(1) : channel;
-  const invalid_prefix = ["mq", "recv", "res", "req"];
-  for (const prefix of invalid_prefix) {
-    if (chan.startsWith(prefix)) {
-      throw new Error(
-        `channel name is invalid, prefix not should be [${prefix}]`
-      );
-    }
-  }
-};
+import { packageJson } from "../utils";
+import { call_api_and_print, valid_pubsub_channel } from "./misc";
 
 export const install_pubsub_command = (program: Command) => {
   program
@@ -50,6 +39,10 @@ export const install_pubsub_command = (program: Command) => {
           query: {
             multicast,
             cache,
+          },
+          headers: {
+            "pb-cli-method": "pub",
+            "pb-cli-version": packageJson.version,
           },
         });
       }
@@ -94,6 +87,10 @@ export const install_pubsub_command = (program: Command) => {
             json,
             query: {
               mime,
+            },
+            headers: {
+              "pb-cli-method": "sub",
+              "pb-cli-version": packageJson.version,
             },
           });
         }

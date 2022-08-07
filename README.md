@@ -5,11 +5,14 @@ command-line interface for pbsb
 ```
 pbsb-cli -h
 ```
+- windows: pbsb-cli.exe -h
+- linux: pbsb-cli.linux -h
+- macos: pbsb-cli.macos -h
 
 ## help
-```
-Usage: pbsb-cli [options] [command]
-
+<details>
+<summary>help output</summary>
+<pre>
 command-line interface for pbsb
 
 Options:
@@ -23,13 +26,111 @@ Commands:
   req [options]                 request message
   consume [options] <filename>  consume message from message queue
   produce [options] <filename>  produce message to message queue
-  help [command]                display help for command
-```
+  share [options] <filepath>    share file
+  sget [options]                download files by subscribing channel (like
+                                wget)
+  chat [options] <channel>      simple chat via channels
+  host [options] <filename>     host http server based on script
+  feeder [options]              Feed tg bot-updates to MQ
+</pre>
+</details>
+
+## feeder
+
+<details>
+<summary>help output</summary>
+<pre>
+Feed tg bot-updates to MQ
+
+Options:
+  -T, --token <string>    bot token
+  -s, --server [address]  server address (default: "localhost:9292")
+  -c, --channel <name>    mq namespace
+  -a, --ack               auto ack when message fetched
+  -x, --proxy [address]   http proxy for request
+  -t, --ttl [second]      message default ttl (s) (default: "900")
+</pre>
+</details>
+
+## share
+
+<details>
+<summary>help output</summary>
+<pre>
+share file
+
+Arguments:
+  filepath                filepath of file to be share
+
+Options:
+  -w, --watch             watch file changes and send a new file for each
+                          change
+  -c, --channel <name>    channel name
+  -s, --server [address]  server address (default: "localhost:9292")
+  -m, --multicast         message multicast (default: true)
+  -c, --cache             message cache (default: false)
+</pre>
+</details>
+
+## sget
+
+<details>
+<summary>help output</summary>
+<pre>
+download files by subscribing channel (like wget)
+
+Options:
+  -c, --channel <name>     channel name
+  -s, --server [address]   server address (default: "localhost:9292")
+  -o, --output [filename]  write to file instead of stdout
+  -w, --watch              watch channel and downloading the latest file
+  -i, --interval [ms]      interval of each request (default: "1000")
+  -r, --retry [number]     maximum number of retries in case of request errors
+                           (default: "10")
+  -S, --shell [string]     a shell script will be executed after the file is
+                           changed
+</pre>
+</details>
+
+## host
+
+<details>
+<summary>help output</summary>
+<pre>
+host http server based on script
+
+Arguments:
+  filename                 server script filename
+
+Options:
+  -s, --server [address]   server address (default: "localhost:9292")
+  -r, --router <string>    host router
+  -i, --instance [number]  instance number (default: "1")
+</pre>
+</details>
+
+## chat
+
+<details>
+<summary>help output</summary>
+<pre>
+simple chat via channels
+
+Arguments:
+  channel                  channel path
+
+Options:
+  -u, --username [string]  chat username
+  -s, --server [address]   server address (default: "localhost:9292")
+  -c, --codecs [string]    chat message codecs
+</pre>
+</details>
 
 ## call
-```
-Usage: pbsb-cli call [options] <pathname>
 
+<details>
+<summary>help output</summary>
+<pre>
 simple call server
 
 Arguments:
@@ -40,13 +141,14 @@ Options:
   -s, --server [address]  server address (default: "localhost:9292")
   -p, --payload [string]  payload data
   -q, --query [string]    query data
-  -h, --help              display help for command
-```
+</pre>
+</details>
 
 ## pub
-```
-Usage: pbsb-cli pub [options] <string>
 
+<details>
+<summary>help output</summary>
+<pre>
 publish message
 
 Arguments:
@@ -58,13 +160,14 @@ Options:
   -s, --server [address]  server address (default: "localhost:9292")
   -m, --multicast         message multicast (default: true)
   -c, --cache             message cache (default: false)
-  -h, --help              display help for command
-```
+</pre>
+</details>
 
 ## sub
-```
-Usage: pbsb-cli sub [options]
 
+<details>
+<summary>help output</summary>
+<pre>
 subcribe message
 
 Options:
@@ -73,13 +176,14 @@ Options:
   -s, --server [address]  server address (default: "localhost:9292")
   -m, --mime [string]     custom mime type
   -p, --persist           persist connect (default: false)
-  -h, --help              display help for command
-```
+</pre>
+</details>
 
 ## consume
-```
-Usage: pbsb-cli consume [options] <filename>
 
+<details>
+<summary>help output</summary>
+<pre>
 consume message from message queue
 
 Arguments:
@@ -92,13 +196,14 @@ Options:
   -p, --priority [weight]  The weight of the current consumer in the priority
                            (default: "0")
   -d, --dead               fetch messages from the dead letter queue
-  -h, --help               display help for command
-```
+</pre>
+</details>
 
 ## produce
-```
-Usage: pbsb-cli produce [options] <filename>
 
+<details>
+<summary>help output</summary>
+<pre>
 produce message to message queue
 
 Arguments:
@@ -107,14 +212,30 @@ Arguments:
 Options:
   -s, --server [address]  server address (default: "localhost:9292")
   -c, --channel <name>    message queue namespace
-  -h, --help              display help for command
-```
+</pre>
+</details>
 
 # todo
-- [ ] host http server
-- [ ] chat
-- [ ] file share
-- [ ] signature auth
-- [ ] support typescript for worker
+- [ ] Signature auth
+- [ ] Support typescript for worker
+- [ ] More features for a stable production environment
 
+# BTW
 
+### why vscode exclude /dist ?
+[issue](https://github.com/vercel/pkg/issues/1589#issuecomment-1108856897)
+
+### How to get permission to call service ?
+contact [me](https://github.com/zhzLuke96)
+
+# Maintainers
+
+[@zhzluke96](https://github.com/zhzLuke96)
+
+# Contributing
+
+Feel free to dive in! [Open an issue](https://github.com/zhzLuke96/pbsb-cli/issues/new) or submit PRs.
+
+# LICENSE
+
+Code is licensed under the [MIT License](./LICENSE).

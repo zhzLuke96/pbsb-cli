@@ -1,10 +1,20 @@
+import "esm-hook";
+
 import { Command } from "commander";
 
-import packageJson from "../package.json";
+import { packageJson } from "./utils";
+
 import { install_call_command } from "./commands/call";
-import { install_mq_command } from "./commands/mq";
+import { install_chat_command } from "./commands/chat";
+import { install_host_command } from "./commands/host";
+import { install_consume_command } from "./commands/consume";
+import { install_produce_command } from './commands/produce';
 import { install_pubsub_command } from "./commands/pubsub";
 import { install_reqres_command } from "./commands/reqres";
+import { install_sget_command } from "./commands/sget";
+import { install_share_command } from "./commands/share";
+import { install_feeder_command } from './commands/feeder';
+
 
 const program = new Command();
 
@@ -16,14 +26,23 @@ program
 install_call_command(program);
 install_pubsub_command(program);
 install_reqres_command(program);
-install_mq_command(program);
+install_consume_command(program);
+install_produce_command(program);
+install_share_command(program);
+install_sget_command(program);
+install_chat_command(program);
+install_host_command(program);
+install_feeder_command(program);
 
 program.parse(process.argv);
 
 process
   .on("unhandledRejection", (reason: any) => {
-    console.log("unhandledRejection", reason);
+    console.error("[err:rej]", reason?.message || reason);
+    console.error(reason);
+    // TODO 某些报错可能需要直接退出
   })
   .on("uncaughtException", (reason: any) => {
-    console.log("uncaughtException", reason);
+    console.error("[err:exp]", reason?.message || reason);
+    console.error(reason);
   });

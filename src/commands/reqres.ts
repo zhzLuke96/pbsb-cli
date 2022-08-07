@@ -1,6 +1,7 @@
 import { Command } from "commander";
 import parse_headers from "parse-headers";
-import urlJoin from "../urlJoin";
+import { urlJoin } from "../urlJoin";
+import { packageJson } from "../utils";
 import { call_api_and_print } from "./misc";
 
 // * cli just supprt req call
@@ -25,11 +26,15 @@ export const install_reqres_command = (program: Command) => {
         json: boolean;
       }) => {
         const headers_obj = parse_headers(headers || "");
-        const uri = (urlJoin as any)("req", channel);
+        const uri = urlJoin("req", channel);
         await call_api_and_print({
           server,
           json,
-          headers: headers_obj,
+          headers: {
+            ...headers_obj,
+            "pb-cli-method": "req",
+            "pb-cli-version": packageJson.version,
+          },
           pathname: uri,
         });
       }

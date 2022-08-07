@@ -1,31 +1,22 @@
 {
-    "compilerOptions": {
-      "target": "esnext",
-      "module": "commonjs",
-      "resolveJsonModule": true,
-      "allowJs": true,
-      "outDir": "./dist",
-      "strict": true,
-      "noImplicitAny": false,
-       "moduleResolution": "node",
-      "esModuleInterop": true,
-      "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true
-    },
-    "include": [
-        "src/**/*"
-    ],
-    "exclude": [
-        "node_modules",
-        "**/*.spec.ts",
-        "examples"
-    ],
-    "ts-node": {
-      "transpileOnly": true,
-      "files": true,
-      "compilerOptions": {
-        
-      }
-    },
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "CommonJS",
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "outDir": "./dist",
+    "strict": true,
+    "noImplicitAny": false,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts", "examples"],
+  "ts-node": {
+    "transpileOnly": true,
+    "files": true,
+    "compilerOptions": {}
   }
-  
+}

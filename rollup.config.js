@@ -2,8 +2,9 @@ import cjs from "@rollup/plugin-commonjs";
 import resolve from "@rollup/plugin-node-resolve";
 import esbuild from "rollup-plugin-esbuild";
 import json from "@rollup/plugin-json";
+import alias from "@rollup/plugin-alias";
 
-const production = process.env.NODE_ENV === 'production';
+const production = process.env.NODE_ENV === "production";
 
 export default [
   {
