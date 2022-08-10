@@ -32,7 +32,6 @@ export class ForkKeeper<
     if (ext !== ".js") {
       throw new Error(`[${ext}] type of script is not supported`);
     }
-
     this.try_fork();
   }
 

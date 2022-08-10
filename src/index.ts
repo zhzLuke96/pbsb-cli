@@ -14,6 +14,7 @@ import { install_reqres_command } from "./commands/reqres";
 import { install_sget_command } from "./commands/sget";
 import { install_share_command } from "./commands/share";
 import { install_feeder_command } from './commands/feeder';
+import { install_fastapi_command } from './commands/fastapi';
 
 
 const program = new Command();
@@ -33,6 +34,7 @@ install_sget_command(program);
 install_chat_command(program);
 install_host_command(program);
 install_feeder_command(program);
+install_fastapi_command(program);
 
 program.parse(process.argv);
 

@@ -163,7 +163,7 @@ const TOKEN_REG = /[0-9]{9}:[a-zA-Z0-9_-]{35}/g;
 export const install_feeder_command = (program: Command) => {
   program
     .command("feeder")
-    .description("Feed tg bot-updates to MQ")
+    .description("feed tg bot-updates to MQ")
     .option("-T, --token <string>", "bot token")
     .option("-s, --server [address]", "server address", "localhost:9292")
     .option("-c, --channel <name>", "mq namespace")

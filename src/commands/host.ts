@@ -115,7 +115,7 @@ class HostSev {
         .map(([k, v]) => [k.slice("pb-h-".length), v])
     );
 
-    // TODO retry
+    // TODO retry / headers / statusCode
     const { req } = await call({
       server_address,
       pathname: `recv/${pbres.recv_id}`,
