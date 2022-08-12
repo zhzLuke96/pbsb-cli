@@ -141,7 +141,7 @@ export const install_host_command = (program: Command) => {
     .description("host http server based on script")
     .argument("<filename>", "server script filename")
     .option("-s, --server [address]", "server address", "localhost:9292")
-    .option("-r, --router <string>", "host router")
+    .requiredOption("-r, --router <string>", "host router")
     .option("-i, --instance [number]", "instance number", "1")
     .action(
       async (

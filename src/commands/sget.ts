@@ -70,7 +70,7 @@ export const install_sget_command = (program: Command) => {
   program
     .command("sget")
     .description("download files by subscribing channel (like wget)")
-    .option("-c, --channel <name>", "channel name")
+    .requiredOption("-c, --channel <name>", "channel name")
     .option("-s, --server [address]", "server address", "localhost:9292")
     .option("-o, --output [filename]", "write to file instead of stdout")
     .option("-w, --watch", "watch channel and downloading the latest file")

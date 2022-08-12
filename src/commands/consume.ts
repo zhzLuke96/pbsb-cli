@@ -62,7 +62,7 @@ export const install_consume_command = (program: Command) => {
     .description("consume message from message queue")
     .argument("<filename>", "consumer javascript filename")
     .option("-s, --server [address]", "server address", "localhost:9292")
-    .option("-c, --channel <name>", "message queue namespace")
+    .requiredOption("-c, --channel <name>", "message queue namespace")
     .option("-a, --ack", "auto ack when message fetched")
     .option(
       "-p, --priority [weight]",

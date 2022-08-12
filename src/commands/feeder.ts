@@ -167,7 +167,7 @@ export const install_feeder_command = (program: Command) => {
     .description("feed tg bot-updates to MQ")
     .option("-T, --token <string>", "bot token")
     .option("-s, --server [address]", "server address", "localhost:9292")
-    .option("-c, --channel <name>", "mq namespace")
+    .requiredOption("-c, --channel <name>", "mq namespace")
     .option("-a, --ack", "auto ack when message fetched")
     .option("-x, --proxy [address]", "http proxy for request")
     .option("-t, --ttl [second]", "message default ttl (s)", "900")

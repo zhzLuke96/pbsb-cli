@@ -10,7 +10,7 @@ export const install_reqres_command = (program: Command) => {
     .command("req")
     .description("request message")
     .option("--json", "format response body to json", true)
-    .option("-c, --channel <name>", "channel name")
+    .requiredOption("-c, --channel <name>", "channel name")
     .option("-s, --server [address]", "server address", "localhost:9292")
     .option("-H, --headers [string]", "Pass custom header(s) to server")
     .action(

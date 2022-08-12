@@ -248,7 +248,7 @@ export const install_fastapi_command = (program: Command) => {
     .command("fastapi")
     .argument("<filepath>", "script filepath")
     .option("-s, --server [address]", "server address", "localhost:9292")
-    .option("-c, --channel <name>", "api router path")
+    .requiredOption("-c, --channel <name>", "api router path")
     .option("-i, --instance [number]", "fork instance number", "1")
     .action(
       async (

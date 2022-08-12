@@ -20,7 +20,7 @@ export const install_produce_command = (program: Command) => {
     .description("produce message to message queue")
     .argument("<filename>", "producer javascript filename")
     .option("-s, --server [address]", "server address", "localhost:9292")
-    .option("-c, --channel <name>", "message queue namespace")
+    .requiredOption("-c, --channel <name>", "message queue namespace")
     .action(
       async (
         script_filename: string,

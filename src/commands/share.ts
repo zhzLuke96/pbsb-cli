@@ -59,7 +59,7 @@ export const install_share_command = (program: Command) => {
       "-w, --watch",
       "watch file changes and send a new file for each change"
     )
-    .option("-c, --channel <name>", "channel name")
+    .requiredOption("-c, --channel <name>", "channel name")
     .option("-s, --server [address]", "server address", "localhost:9292")
     .option("-m, --multicast", "message multicast", true)
     .option("-c, --cache", "message cache", false)

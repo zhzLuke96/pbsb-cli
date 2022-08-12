@@ -9,7 +9,7 @@ export const install_pubsub_command = (program: Command) => {
     .description("publish message")
     .argument("<string>", "message body")
     .option("--json", "auto try format response body to json", true)
-    .option("-c, --channel <name>", "channel name")
+    .requiredOption("-c, --channel <name>", "channel name")
     .option("-s, --server [address]", "server address", "localhost:9292")
     .option("-m, --multicast", "message multicast", true)
     .option("-c, --cache", "message cache", false)
