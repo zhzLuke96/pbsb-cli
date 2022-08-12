@@ -4,6 +4,6 @@ process.on("message", (req) => {
     headers: {
       "content-type": "text/html; charset=utf-8",
     },
-    body: "<h1>hello pubsub host</h1>",
+    body: `<h1>hello pubsub host, ${req.uri}</h1>`,
   });
 });

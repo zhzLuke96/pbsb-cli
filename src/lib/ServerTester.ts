@@ -1,44 +1,58 @@
 import { call_api } from "../callApi";
 import ora from "ora";
+import { wait } from "../commands/misc";
 
 export class ServerTester {
-  private time = Infinity;
-  private latest_call = 0;
-
   constructor(private readonly server_address: string) {}
 
   async try_ready() {
     const spinner = ora();
-    spinner.start("server connecting...");
-    await this.ping();
-    spinner.succeed("server ready");
+    while (1) {
+      spinner.start("server connecting...");
+      try {
+        const time = await this.ping();
+        spinner.succeed(`Server Connected, Response Delay ${time}ms`);
+        return;
+      } catch (error) {
+        spinner.fail("server connect error, retry again after 1s");
+        console.error("[test]error:", "\t", (error as any)?.message || error);
+        await wait(1000);
+        continue;
+      }
+    }
   }
 
-  private pingP = null as null | Promise<number>;
+  async test_forever() {
+    const spinner = ora();
+    while (1) {
+      spinner.start("server connecting again...");
+      try {
+        const time = await this.ping();
+        spinner.succeed(`Server Ready Again~ Response Delay ${time}ms`);
+        return;
+      } catch (error) {
+        spinner.fail("server connect error, retry again after 1s");
+        console.error("[test]error:", "\t", (error as any)?.message || error);
+        await wait(1000);
+        continue;
+      }
+    }
+  }
+
   async ping() {
-    const { latest_call, time, server_address, pingP } = this;
-    if (Date.now() - latest_call <= 5 * 1000 * 60) {
-      return time;
-    }
-    if (pingP) {
-      return pingP;
-    }
-    let resolve: any = () => {};
-    let reject: any = () => {};
-    this.pingP = new Promise((res, rej) => [(resolve = res), (reject = rej)]);
-    const start_time = Date.now();
-    this.latest_call = start_time;
-    const { body } = await call_api({
+    const { server_address } = this;
+    const { body, response } = await call_api({
       server_address,
       pathname: "ping",
+      headers: {
+        "pb-ts": Date.now(),
+      },
     });
-    if (!body.toString().startsWith("pong")) {
-      const err = new Error(`server error`);
-      reject(err);
+    const body_str = body.toString();
+    if (!body_str.startsWith("pong")) {
+      const err = new Error(`server error, should pong, but ${body_str}`);
       throw err;
     }
-    this.time = start_time - Date.now();
-    resolve(this.time);
-    return this.time;
+    return Number(response.headers["pb-time"]);
   }
 }

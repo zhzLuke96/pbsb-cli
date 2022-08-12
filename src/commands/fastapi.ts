@@ -151,9 +151,10 @@ class FastapiService {
         if (timeout) {
           continue;
         }
-        console.error(`[fastapi:call_res]error:`);
-        console.error((error as any)?.message || error);
-        console.log("[fastapi:call_res]retry after 1s");
+        console.log(`[feeder:err]error:`);
+        console.log("\t", (error as any)?.message || error);
+        const tester = new ServerTester(server_address);
+        await tester.test_forever();
         await wait(1000);
       }
     }

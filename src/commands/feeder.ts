@@ -10,12 +10,11 @@ import { wait } from "./misc";
 import ora from "ora";
 import { call_api } from "../callApi";
 import { urlJoin } from "../urlJoin";
-import { ServerTester } from '../lib/ServerTester';
+import { ServerTester } from "../lib/ServerTester";
 
-const base_url = decodeURIComponent(Buffer.from(
-  "aHR0cHMlM0EvL2FwaS50ZWxlZ3JhbS5vcmcvYm90",
-  "base64"
-).toString());
+const base_url = decodeURIComponent(
+  Buffer.from("aHR0cHMlM0EvL2FwaS50ZWxlZ3JhbS5vcmcvYm90", "base64").toString()
+);
 const method_url = (token: string, method: string) =>
   `${base_url}${token}/${method}`;
 
@@ -132,7 +131,7 @@ class MQPusher {
 
   async push_update(update: any, retry_times = 0) {
     if (retry_times >= 8) {
-      console.log('[retry:max]', 'retry max');
+      console.log("[retry:max]", "retry max");
       process.exit(1);
     }
     const { server_address, channel, autoack, ttl_ms } = this;
@@ -151,8 +150,10 @@ class MQPusher {
         console.error(`[push]`, statusCode, statusMessage || "server error");
       }
     } catch (error) {
-      console.log(`[pusher:err]`, (error as any).message);
-      console.log('retry again');
+      console.log(`[feeder:err]error:`);
+      console.log("\t", (error as any)?.message || error);
+      const tester = new ServerTester(server_address);
+      await tester.test_forever();
       await this.push_update(update, retry_times + 1);
     }
   }

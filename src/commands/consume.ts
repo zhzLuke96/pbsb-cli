@@ -1,8 +1,7 @@
 import { Command } from "commander";
-import { call_api, call_api_json, call } from "../callApi";
+import { call_api, call } from "../callApi";
 
 import { packageJson } from "../utils";
-import { wait } from "./misc";
 import { ForkKeeper } from "../lib/ForkKeeper";
 import { ServerTester } from "../lib/ServerTester";
 
@@ -49,13 +48,10 @@ const message_loop = async (
       if (timeout) {
         continue;
       }
-      if (error instanceof Error) {
-        console.log(`[message_loop:err]`, error.message);
-      } else {
-        console.log(error);
-      }
-      console.log(`[message_loop:retry]`, `retry after 1000ms`);
-      await wait(1000);
+      console.log(`[consume:err]error:`);
+      console.log("\t", (error as any)?.message || error);
+      const tester = new ServerTester(server);
+      await tester.test_forever();
     }
   }
 };

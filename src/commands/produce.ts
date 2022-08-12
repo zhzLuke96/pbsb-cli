@@ -32,6 +32,7 @@ export const install_produce_command = (program: Command) => {
         const keeper = new ForkKeeper<ProducePayload>(script_filename);
 
         keeper.on("message", ({ data, ...query }) => {
+          // TODO retry / error catch
           call_api({
             server_address: server,
             pathname: `/mq/${channel}`,

@@ -2,9 +2,9 @@ import { Command } from "commander";
 import { parse } from "path";
 import { call, call_api } from "../callApi";
 import { urlJoin } from "../urlJoin";
-import { to_abs_filepath } from "./misc";
+import { to_abs_filepath, wait } from "./misc";
 import { ForkKeeper } from "../lib/ForkKeeper";
-import { ServerTester } from '../lib/ServerTester';
+import { ServerTester } from "../lib/ServerTester";
 
 interface PbHTTPReq {
   method: string;
@@ -68,33 +68,40 @@ class HostSev {
   async lisent_router() {
     const { server_address, router } = this;
     while (!this.destroyed) {
-      // TODO timeout / retry / error log
-      const resp = await call_api({
-        server_address,
-        pathname: urlJoin("res", router),
-      });
-      let method = "GET";
-      let recv_id = "";
-      let uri = "";
-      const headers = {} as Record<string, any>;
-      for (const [k, v] of Object.entries(resp.response.headers)) {
-        if (k.startsWith("pb-h-")) {
-          headers[k.slice("pb-h-".length)] = v;
-        } else if (k === "pb-method") {
-          method = String(v);
-        } else if (k === "pb-recv-id") {
-          recv_id = String(v);
-        } else if (k === "pb-uri") {
-          uri = String(v);
+      // TODO timeout
+      try {
+        const resp = await call_api({
+          server_address,
+          pathname: urlJoin("res", router),
+        });
+        let method = "GET";
+        let recv_id = "";
+        let uri = "";
+        const headers = {} as Record<string, any>;
+        for (const [k, v] of Object.entries(resp.response.headers)) {
+          if (k.startsWith("pb-h-")) {
+            headers[k.slice("pb-h-".length)] = v;
+          } else if (k === "pb-method") {
+            method = String(v);
+          } else if (k === "pb-recv-id") {
+            recv_id = String(v);
+          } else if (k === "pb-uri") {
+            uri = String(v);
+          }
         }
+        this.reqt({
+          method,
+          recv_id,
+          uri,
+          headers,
+          body: resp.body,
+        });
+      } catch (error) {
+        console.log(`[host:err]error:`);
+        console.log("\t", (error as any)?.message || error);
+        const tester = new ServerTester(server_address);
+        await tester.test_forever();
       }
-      this.reqt({
-        method,
-        recv_id,
-        uri,
-        headers,
-        body: resp.body,
-      });
     }
   }
 
@@ -128,6 +135,7 @@ class HostSev {
 }
 
 export const install_host_command = (program: Command) => {
+  // TODO logger
   program
     .command("host")
     .description("host http server based on script")
