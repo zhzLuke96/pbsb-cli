@@ -19,7 +19,7 @@ function serialize(obj: Record<string, any>, prefix?: string) {
   return strs.join("&");
 }
 
-const createURL = (url: string, protocol = "http" as "http" | "https") => {
+const createURL = (url: string, protocol: "http" | "https") => {
   try {
     const ret = new URL(url);
     if (!ret.protocol.startsWith("http")) {
@@ -39,7 +39,7 @@ const createURL = (url: string, protocol = "http" as "http" | "https") => {
 };
 
 const url_with_query = (url: string | URL, query?: Record<string, any>) => {
-  const tURL = url instanceof URL ? url : createURL(url);
+  const tURL = url instanceof URL ? url : createURL(url, 'https');
   if (query) {
     tURL.search = serialize(query);
   }
@@ -192,7 +192,8 @@ const ensure_base_url = async (uri: string) => {
     return createURL(uri, "http");
   }
 
-  const url = createURL(uri);
+  // *优先test https，因为主服务兼容http和https双协议，http也有重定向返回，但是不可用
+  const url = createURL(uri, 'https');
   url.pathname = "/ping";
   const try_once = async () => {
     try {

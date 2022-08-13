@@ -6,11 +6,11 @@ import got from "got";
 import { HttpsProxyAgent } from "hpagent";
 
 import { Update } from "typegram";
-import { wait } from "./misc";
+import { wait } from "../misc";
 import ora from "ora";
-import { call_api } from "../callApi";
-import { urlJoin } from "../urlJoin";
-import { ServerTester } from "../lib/ServerTester";
+import { call_api } from "../../callApi";
+import { urlJoin } from "../../urlJoin";
+import { ServerTester } from "../../lib/ServerTester";
 
 const base_url = decodeURIComponent(
   Buffer.from("aHR0cHMlM0EvL2FwaS50ZWxlZ3JhbS5vcmcvYm90", "base64").toString()
@@ -161,9 +161,9 @@ class MQPusher {
 
 const TOKEN_REG = /[0-9]{9}:[a-zA-Z0-9_-]{35}/g;
 
-export const install_feeder_command = (program: Command) => {
+export const install_tg_feeder_command = (program: Command) => {
   program
-    .command("feeder")
+    .command("tg-feeder")
     .description("feed tg bot-updates to MQ")
     .option("-T, --token <string>", "bot token")
     .option("-s, --server [address]", "server address", "localhost:9292")

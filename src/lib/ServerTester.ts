@@ -10,7 +10,9 @@ export class ServerTester {
     while (1) {
       spinner.start("server connecting...");
       try {
-        const time = await this.ping();
+        const start_time = Date.now();
+        await this.ping();
+        const time = Date.now() - start_time;
         spinner.succeed(`Server Connected, Response Delay ${time}ms`);
         return;
       } catch (error) {
@@ -27,7 +29,9 @@ export class ServerTester {
     while (1) {
       spinner.start("server connecting again...");
       try {
-        const time = await this.ping();
+        const start_time = Date.now();
+        await this.ping();
+        const time = Date.now() - start_time;
         spinner.succeed(`Server Ready Again~ Response Delay ${time}ms`);
         return;
       } catch (error) {
@@ -53,6 +57,7 @@ export class ServerTester {
       const err = new Error(`server error, should pong, but ${body_str}`);
       throw err;
     }
+    // TODO 由于系统时间不同步可能出现负值...
     return Number(response.headers["pb-time"]);
   }
 }

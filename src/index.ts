@@ -13,7 +13,7 @@ import { install_pubsub_command } from "./commands/pubsub";
 import { install_reqres_command } from "./commands/reqres";
 import { install_sget_command } from "./commands/sget";
 import { install_share_command } from "./commands/share";
-import { install_feeder_command } from './commands/feeder';
+import { install_tg_feeder_command } from './commands/tg/tg-feeder';
 import { install_fastapi_command } from './commands/fastapi';
 
 
@@ -33,8 +33,10 @@ install_share_command(program);
 install_sget_command(program);
 install_chat_command(program);
 install_host_command(program);
-install_feeder_command(program);
 install_fastapi_command(program);
+
+// TG
+install_tg_feeder_command(program);
 
 program.parse(process.argv);
 
